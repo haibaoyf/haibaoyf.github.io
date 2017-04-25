@@ -2,10 +2,11 @@
 layout: docwithnav
 assignees:
 - ashvayka
-title: Mail Settings
-description: Thingsboard IoT platform mail settings
+title: 邮箱设置
+description: 海豹物联邮箱设置
 
 ---
+管理员可以设置系统推送邮箱。
 
 Thingsboard System Administrator is able to configure connection to SMTP server that will be used to distribute activation and password reset emails to users.
 This configuration step is required on production environments. 
