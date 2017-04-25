@@ -1,38 +1,9 @@
-## Instructions for Contributing to the Docs/Website
-
-* [Fork this repository](https://help.github.com/articles/fork-a-repo/)
-* [Deploy the site locally](#deployment-of-the-site-locally)
-* Add your changes
-* [Create Pull Request](https://help.github.com/articles/creating-a-pull-request/)
-
-## Deployment of the site locally
-
-The below commands setup your environment for running GitHub pages locally. 
-Any edits you make will be viewable on a lightweight webserver that runs on your local machine.
-
-Install Ruby 2.2 or higher. If you're on Linux, run these commands:
-
-    sudo apt-get install software-properties-common
-    sudo apt-add-repository ppa:brightbox/ruby-ng
-    sudo apt-get update
-    sudo apt-get install ruby2.2
-    sudo apt-get install ruby2.2-dev
-
-* If you're on a Mac, follow [these instructions](https://gorails.com/setup/osx/).
-* If you're on a Windows machine you can use the [Ruby Installer](http://rubyinstaller.org/downloads/). During the installation make sure to check the option for *Add Ruby executables to your PATH*.
-
-Install the GitHub Pages package, which includes Jekyll:
-
-	gem install github-pages
-
-Clone our site:
-
-	git clone https://github.com/thingsboard/thingsboard.github.io.git
-
-Make any changes you want. Then, to see your changes locally:
-
-	cd thingsboard.github.io
-	jekyll serve
-
-Your copy of the site will then be viewable at: [http://localhost:4000](http://localhost:4000)
-(or wherever Jekyll tells you).
+1、申请github账户，登录并创建仓库，注意仓库名称需与账户名一致，且名称为username.github.io
+2、克隆到本地并修改
+（1）Git clone https://github.com/username/username.github.io.git 
+（2）修改文件并保存
+3、上传
+（1）打开命令行进入到username.github.io目录下依次执行下面的命令 
+git add . 
+git commit -m “上传网站源码到github”
+（2）git push 并输入账号密码（github账号密码） 完成传输
