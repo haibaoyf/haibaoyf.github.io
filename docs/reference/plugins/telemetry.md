@@ -2,31 +2,16 @@
 layout: docwithnav
 assignees:
 - ashvayka
-title: Telemetry Plugin
+title: 数据采集插件
 
 ---
 
-## Overview
+该插件主要负责
 
-Telemetry plugin is responsible for:
+- 连续持久的最新传输过来的数据的属性更新；
+- 连续持久的最新传输过来的数据到内部数据存储;
+- 提供服务器端API查询和订阅数据更新。
 
- - persisting attribute updates to internal data storage;
- - persisting timeseries data to internal data storage; 
- - provides server-side api to query and subscribe for data updates. 
- 
-Since Telemetry plugin functionality is critical for data visualization purposes in dashboards, 
-it is configured on the system level by system administrator. 
-Advanced users or platform developers can customize telemetry plugin functionality.
+该插件功能对于仪表板中的数据可视化至关重要，因此一般由系统管理员在系统级别进行配置。企业管理员也可以自定义自己的数据收集插件。
 
-## Configuration
-
-There is no specific configuration for this component.
-
-## Server-side API
-
-Telemetry plugin API description is available in corresponding [attributes](/docs/user-guide/attributes/) 
-and [telemetry](/docs/user-guide/telemetry/) guides. 
-
-## Example
-
-As a system administrator, you are able to review plugin example inside **Plugins->System Telemetry Plugin**.
+![img](http://help.gzhaibaogd.com/images/plugin-telemetry.png)

@@ -6,83 +6,67 @@ title: REST API Call Plugin
 
 ---
 
-## Overview
 
-Rest API plugin is responsible for sending HTTP requests to specific endpoints triggered by specific rules
+Rest API插件负责将HTTP请求发送到由特定规则触发的特定端点
+您可以指定以下配置参数：
 
-## Configuration
+- http端点服务器主机
+- http端点服务器端口
+- http请求的基本路径
+- http认证方式。目前没有授权或基本支持
+- 用户名，如果是基本的验证方法
+- 基本auth方法的密码
 
-You can specify following configuration parameters:
+在本例中，我们将演示如何配置Rest API Call扩展，以便每当设备的新的遥测消息到达时，能够将POST或PUT请求发送到特定的REST端点。
 
- - http endpoint server host
- - http endpoint server port
- - base path for the http request
- - http authentication method. At the moment no authorization or basic is supported
- - username in case basic auth method
- - password in case basic auth method
+继续之前的先决条件REST API呼叫扩展配置：
 
-## Server-side API
+- 事件板已启动并运行
+- 能够接收POST或PUT请求的第三方HTTP服务器和特定端点启动并运行
+##REST插件配置
 
-This plugin does not provide any server-side API.
+我们首先配置REST API Call plugin。转到插件菜单，点击'+'按钮并创建新的插件：
 
-## Example
+![image](http://help.gzhaibaogd.com/images/rest-api-call/rest-api-call-plugin-config-1.png)
 
-In this example we are going to demonstrate how you can configure Rest API Call extension to be able to send POST or PUT request to particular REST endpoint every time new telemetry message for the device arrives.
+![image](http://help.gzhaibaogd.com/images/rest-api-call/rest-api-call-plugin-config-2.png)
 
-Prerequisites before continue REST API Call extension configuration:
+请为要转移请求的REST端点设置正确的URL，端口，路径和身份验证方法。保存插件并点击“激活”插件按钮：
 
- - Thingsboard is up and running
- - Third-party HTTP server and particular endpoint that is able to receive POST or PUT requests are up and running
+![image](http://help.gzhaibaogd.com/images/rest-api-call/rest-api-call-activate-plugin.png)
 
-### REST API Call Plugin Configuration
+##REST调用规则
 
-Let's configure REST API Call plugin first. Go to *Plugins* menu, click on a '+' button and create new plugin:
+现在是时候创建适当的规则了。
 
-![image](/images/reference/plugins/rest-api-call/rest-api-call-plugin-config-1.png)
+![image](http://help.gzhaibaogd.com/images/rest-api-call/rest-api-call-rule-config.png)
 
-![image](/images/reference/plugins/rest-api-call/rest-api-call-plugin-config-2.png)
+添加POST_TELEMETRY消息类型的过滤器
 
-Please set correctly URL, port, path and authentication method for the REST endpoint where request is going to be transferred.
+![image](http://help.gzhaibaogd.com/images/rest-api-call/post-telemetry-filter.png)
 
-Save plugin and click on *'Activate'* plugin button:
+点击“添加”按钮添加过滤器。
+然后在插件字段的下拉框中选择“REST API调用插件”：
 
-![image](/images/reference/plugins/rest-api-call/rest-api-call-activate-plugin.png)
-
-### REST API Call Rule Configuration
-
-Now it's time to create appropriate Rule.
-
-![image](/images/reference/plugins/rest-api-call/rest-api-call-rule-config.png)
-
-Add filter for **POST_TELEMETRY** message type:
-
-![image](/images/reference/plugins/rest-api-call/post-telemetry-filter.png)
-
-Click *'Add'* button to add filter.
-
-Then select *'REST API Call Plugin'* in the drop-down box for the Plugin field:
-
-![image](/images/reference/plugins/rest-api-call/rest-api-call-plugin-selection.png)
+![image](http://help.gzhaibaogd.com/images/rest-api-call/rest-api-call-plugin-selection.png)
 
 Add action that will send temperature telemetry of device to particular REST action-path. In the action you can provide request type and result code that you expected from the REST endpoint in case of successful call.
 
-![image](/images/reference/plugins/rest-api-call/rest-api-call-rule-action-config-1.png)
+![image](http://help.gzhaibaogd.com/images/rest-api-call/rest-api-call-rule-action-config-1.png)
 
-![image](/images/reference/plugins/rest-api-call/rest-api-call-rule-action-config-2.png)
+![image](http://help.gzhaibaogd.com/images/rest-api-call/rest-api-call-rule-action-config-2.png)
 
-Click *'Add'* button and then activate Rule.
+Click ‘Add’ button and then activate Rule.
+##REST示例
 
-### Sending Temperature Telemetry
-
-Now for any of your devices send Telemetry message that contains *'temp'* telemetry:
-
+Now for any of your devices send Telemetry message that contains ‘temp’ telemetry:
 ```json
 {"temp":73.4}
 ```
 
-You should see **'73.4'** as a body request in appropriate rest endpoint once you'll post this message.
-
+You should see ‘73.4’ as a body request in appropriate rest endpoint once you’ll post this message.
 Here is an example of a command that publish single telemetry message to locally installed Thingsboard:
+mosquitto_pub -d -h "localhost" -p 1883 -t "v1/devices/me/telemetry" -u "$ACCESS_TOKEN" -m '{"temp":73.4}'
 
 ```bash
 mosquitto_pub -d -h "localhost" -p 1883 -t "v1/devices/me/telemetry" -u "$ACCESS_TOKEN" -m '{"temp":73.4}'

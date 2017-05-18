@@ -2,30 +2,22 @@
 layout: docwithnav
 assignees:
 - ashvayka
-title: RPC Plugin
+title: RPC插件
 
 ---
 
-## Overview
+RPC插件主要负责：
 
-RPC plugin is responsible for:
+- 提供REST API以将RPC请求从服务器端应用程序发送到设备;
+- 通过可用的协议向设备发送RPC请求：[MQTT](/docs/reference/mqtt-api/#rpc-api)，[CoAP](/docs/reference/coap-api/#rpc-api)或[HTTP](/docs/reference/http-api/#rpc-api)协议;
+该插件由系统管理员在系统级进行配置。企业管理员可在自己的级别上配置自己的插件实例，并可自定义RPC插件功能.
 
- - providing REST API to send RPC request from server-side applications to devices;
- - pushing RPC request to devices via one of available protocols: 
- [MQTT](/docs/reference/mqtt-api/#rpc-api), [CoAP](/docs/reference/coap-api/#rpc-api) or [HTTP](/docs/reference/http-api/#rpc-api);  
- 
-By default, this plugin is configured on the system level by system administrator. 
-You are able to configure your own instance of of the plugin on tenant level.
-Advanced users or platform developers can customize rpc plugin functionality.
 
-## Configuration
+可在插件配置中设置RPC的默认超时时间。
 
-You can specify default RPC timeout for plugin instance in plugin configuration.
 
-## Server-side API
+RPC插件API可参考[RPC](/docs/user-guide/rpc/#server-side-rpc-api)的相关资料。
 
-RPC plugin API description is available in corresponding [rpc](/docs/user-guide/rpc/#server-side-rpc-api) guides. 
+可在“插件->RPC插件”中查看插件详细信息。
 
-## Example
-
-As a system administrator, you are able to review plugin example inside **Plugins->System RPC Plugin**.
+![img](http://help.gzhaibaogd.com/images/plugin-rpc.png)

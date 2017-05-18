@@ -2,89 +2,76 @@
 layout: docwithnav
 assignees:
 - ashvayka
-title: Kafka Plugin
+title: Kafka插件
 
 ---
 
-## Overview
+Kafka插件负责向特定规则触发的Kafka经纪人发送消息
 
-Kafka plugin is responsible for sending messages to Kafka brokers triggered by specific rules
+卡夫卡的配置参数如下：
 
-## Configuration
+- 引导服务器 – 卡夫卡经纪人列表
+- 如果连接失败，尝试重新连接到卡夫卡的次数
+- 在客户端上单元批量的消息数
+- 发送到卡夫卡经纪人之前在本地进行缓冲的时间（以ms为单位）
+- 客户端缓冲区最大大小
+- 必须承认写入的最小副本数
+- 主题键序列化程序默认情况下 - org.apache.kafka.common.serialization.StringSerializer
+- 主题值序列化程序默认情况下 - org.apache.kafka.common.serialization.StringSerializer
+- 可以为kafka代理连接提供任何其他附加属性
 
-You can specify following configuration parameters:
 
- - *bootstrap servers* - list of kafka brokers
- - *number of attempts to reconnect to kafka if connection fails*
- - *number of messages to unit into batch on client*
- - *time to buffer locally before sending to kafka broker (in ms)*
- - *buffer max size on client*
- - *minimum number of replicas that must acknowledge a write*
- - *topic key serializer* by default - org.apache.kafka.common.serialization.StringSerializer
- - *topic value serializer* by default - org.apache.kafka.common.serialization.StringSerializer
- - any other additional properties could be provided for kafka broker connection
+无相关配置
 
-## Server-side API
+在这个例子中，我们将演示如何配置此扩展，以便每当设备的新遥测消息到达时，能够向Kafka主题发送消息。
+继续前提条件Kafka扩展配置：
 
-This plugin does not provide any server-side API.
+- 卡夫卡经纪人正在运行
+- 创建适当的Kafka主题
+- 事件板已启动并运行
 
-## Example
+## Kafka插件配置
 
-In this example we are going to demonstrate how you can configure this extension to be able to send message to Kafka topic every time new telemetry message for the device arrives.
+我们首先配置Kafka插件。转到插件菜单并创建新的插件：
 
-Prerequisites before continue Kafka extension configuration:
+![image](http://help.gzhaibaogd.com/images/kafka/kafka-plugin-config-1.png)
 
- - Kafka broker is up and running
- - Appropriate Kafka Topic created
- - Thingsboard is up and running
+![image](http://help.gzhaibaogd.com/images/kafka/kafka-plugin-config-2.png)
 
-### Kafka Plugin Configuration
+请设置正确的Kafka Bootstrap服务器URL和插件配置部分中适用于您的案例的任何其他参数，以便Kafka扩展能够连接到Kafka代理。
 
-Let's configure Kafka plugin first. Go to *Plugins* menu and create new plugin:
+点击*“Active”*插件按钮：
 
-![image](/images/reference/plugins/kafka/kafka-plugin-config-1.png)
+![image](http://help.gzhaibaogd.com/images/kafka/kafka-activate-plugin.png)
 
-![image](/images/reference/plugins/kafka/kafka-plugin-config-2.png)
+## kafkad调用规则
 
-Please set correctly Kafka Bootstrap Servers URL and any other parameters localed in plugin configuration section that are suitable for your case so Kafka extension is able to connect to Kafka broker.
+现在是时候创建适当的规则了。
 
-Click on *'Activate'* plugin button:
+![image](http://help.gzhaibaogd.com/images/kafka/kafka-rule-config.png)
 
-![image](/images/reference/plugins/kafka/kafka-activate-plugin.png)
+添加POST_TELEMETRY消息类型的过滤器
 
-### Kafka Rule Configuration
+![image](http://help.gzhaibaogd.com/images/kafka/post-telemetry-filter.png)
 
-Now it's time to create appropriate Rule.
+点击*“ADD”*按钮添加过滤器。
+然后在*“PLUGIN”*字段的下拉框中选择*“Kafka Plugin”*：
 
-![image](/images/reference/plugins/kafka/kafka-rule-config.png)
+![image](http://help.gzhaibaogd.com/images/kafka/kafka-plugin-selection.png)
 
-Add filter for **POST_TELEMETRY** message type:
+添加将设备温度遥测的特定卡夫卡主题的操作：
 
-![image](/images/reference/plugins/kafka/post-telemetry-filter.png)
+![image](http://help.gzhaibaogd.com/images/kafka/send-temp-telemetry.png)
 
-Click *'Add'* button to add filter.
+点击*“ADD”*按钮，然后激活规则。
+## Kafka示例
 
-Then select *'Kafka Plugin'* in the drop-down box for the Plugin field:
-
-![image](/images/reference/plugins/kafka/kafka-plugin-selection.png)
-
-Add action that will send temperature telemetry of device to particular kafka topic:
-
-![image](/images/reference/plugins/kafka/send-temp-telemetry.png)
-
-Click *'Add'* button and then activate Rule.
-
-### Sending Temperature Telemetry
-
-Now for any of your devices send Telemetry message that contains *'temp'* telemetry:
-
-```json
+现在，您的任何设备发送包含*“temp”*遥测的遥测信息：
 {"temp":73.4}
-```
 
-You should see **'73.4'** message in appropriate Kafka topic once you'll post this message.
+一旦您发布此消息，您应该在适当的Kafka主题中看到**'73.4'**消息。
 
-Here is an example of a command that publish single telemetry message to locally installed Thingsboard:
+以下是一个将单个遥测消息发布到本地安装的事件板的命令示例：
 
 ```bash
 mosquitto_pub -d -h "localhost" -p 1883 -t "v1/devices/me/telemetry" -u "$ACCESS_TOKEN" -m '{"temp":73.4}'

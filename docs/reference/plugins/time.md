@@ -2,24 +2,14 @@
 layout: docwithnav
 assignees:
 - ashvayka
-title: Time RPC Plugin
+title: 校时插件
 
 ---
 
-## Overview
+校时插件，主要负责处理设备的“getTime”请求，它表明设备可以通过各种连接协议发送RPC请求，以执行服务器端逻辑并获取结果。
 
-Simple RPC plugin that is responsible for handling "getTime" RPC request from devices. 
-This plugin is a part of default Thingsboard installation for demo purposes.
-It demonstrates that devices can send RPC request via various [connectivity protocols](/docs/reference/protocols) to execute server-side logic and get the result. 
+您可以指定**时间格式**配置参数。
 
-## Configuration
+作为租户管理员，您可以查看插件 - >校时插件中的插件示例。
 
-You can specify *time format* configuration parameter. See [DateTimeFormatter API](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html) for more details.
-
-## Server-side API
-
-This plugin does not provide any server-side API. 
-
-## Example
-
-As a tenant administrator, you are able to review plugin example inside **Plugins->Demo Time RPC Plugin**.
+![img](http://help.gzhaibaogd.com/images/plugin-gettime.png)

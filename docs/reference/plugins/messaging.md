@@ -2,73 +2,61 @@
 layout: docwithnav
 assignees:
 - ashvayka
-title: Device Messaging Plugin
+title: 设备间RPC插件
 
 ---
 
-## Overview
 
-This RPC plugin enables communication between various IoT devices through the Thingsboard cluster.
-Plugin introduce basic security features: devices are able to exchange messages only if they belong to the same customer.
-Plugin implementation can be customized to cover more complex security features. 
+该RPC插件可通过服务器实现各种物联网设备之间的通信。因此设备只有在属于同一个客户时才能交换消息。插件实现可以定制，以涵盖更复杂的安全功能。
 
-## Configuration
 
-You can specify following configuration parameters:
+配置界面，您可以指定以下配置参数：
 
- - Maximum amount of devices per customer
- - Default request timeout
- - Maximum request timeout 
+- 每个客户的最大设备数量
+- 默认请求超时
+- 最大请求超时
 
-## Device RPC API
 
-Plugin handles two rpc methods: *getDevices* and *sendMsg*.
-The examples listed below will be based on [demo account](/docs/samples/demo-account/) and [MQTT](/docs/reference/mqtt-api/#client-side-rpc) protocol. 
-Please note that you are able to use other protocols - 
-[CoAP](/docs/reference/coap-api/#client-side-rpc) and [HTTP](/docs/reference/http-api/#client-side-rpc).
- 
-##### Get Device List API
+设备RPC API有两个：*getDevices*和*sendMsg*。下面以MQTT为例进行说明，CoAP和HTTP可参照执行。
 
-In order to send a message to other devices you will need to their identifiers.
-Device can request a list of other devices that belong to the same customer using *getDevices* RPC call.
+## 获取设备列表API
+为了向其他设备发送消息，您需要使用设备标识符。设备可以使用*getDevices* RPC调用来请求属于同一客户的其他设备的列表。
+执行命令如下：
 
-{% capture tabspec %}mqtt-get-device-list
-A,mqtt-get-device-list.sh,shell,resources/mqtt-get-device-list.sh,/docs/reference/plugins/resources/mqtt-get-device-list.sh
-B,mqtt-get-device-list.js,javascript,resources/mqtt-get-device-list.js,/docs/reference/plugins/resources/mqtt-get-device-list.js
-C,response.json,javascript,resources/mqtt-get-device-list.json,/docs/reference/plugins/resources/mqtt-get-device-list.json{% endcapture %}
-{% include tabs.html %}
+	{% capture tabspec %}mqtt-get-device-list
+	A,mqtt-get-device-list.sh,shell,resources/mqtt-get-device-list.sh,/docs/reference/plugins/resources/mqtt-get-device-list.sh
+	B,mqtt-get-device-list.js,javascript,resources/mqtt-get-device-list.js,/docs/reference/plugins/resources/mqtt-get-device-list.js
+	C,response.json,javascript,resources/mqtt-get-device-list.json,/docs/reference/plugins/resources/mqtt-get-device-list.json{% endcapture %}
 
-##### Send Message API
+## 发送消息 API
 
-Device can send a message to other device that belong to the same customer using *sendMsg* RPC call.
+设备可以使用sendMsg RPC调用向同一客户的其他设备发送消息。
+下面的示例将尝试从设备“Test Device A1”发送消息到设备“Test Device A2”。
+执行命令如下：
 
-Example below will attempt to send message from device "Test Device A1" to device "Test Device A2". 
+	{% capture tabspec %}mqtt-send-msg-fail
+	A,mqtt-send-msg.sh,shell,resources/mqtt-send-msg.sh,/docs/reference/plugins/resources/mqtt-send-msg.sh
+	B,mqtt-send-msg.js,javascript,resources/mqtt-send-msg.js,/docs/reference/plugins/resources/mqtt-send-msg.js{% endcapture %}
 
-{% capture tabspec %}mqtt-send-msg-fail
-A,mqtt-send-msg.sh,shell,resources/mqtt-send-msg.sh,/docs/reference/plugins/resources/mqtt-send-msg.sh
-B,mqtt-send-msg.js,javascript,resources/mqtt-send-msg.js,/docs/reference/plugins/resources/mqtt-send-msg.js{% endcapture %}
-{% include tabs.html %}
-
-As a result you should receive following error:
+可能接收到如下消息：
 
 ```json
 {"error":"No active connection to remote device!"}
 ```
 
-Let's launch emulator of target device and send message again:
-{% capture tabspec %}mqtt-receive-msg
-A,mqtt-receive-msg.sh,shell,resources/mqtt-receive-msg.sh,/docs/reference/plugins/resources/mqtt-receive-msg.sh
-B,mqtt-receive-msg.js,javascript,resources/mqtt-receive-msg.js,/docs/reference/plugins/resources/mqtt-receive-msg.js{% endcapture %}
-{% include tabs.html %}
+让我们启动目标设备A2的仿真器，并再次发送消息
 
-As a result you should receive following response from device:
+	{% capture tabspec %}mqtt-receive-msg
+	A,mqtt-receive-msg.sh,shell,resources/mqtt-receive-msg.sh,/docs/reference/plugins/resources/mqtt-receive-msg.sh
+	B,mqtt-receive-msg.js,javascript,resources/mqtt-receive-msg.js,/docs/reference/plugins/resources/mqtt-receive-msg.js{% endcapture %}
+
+因此，您应该从设备收到以下响应：
 
 ```json
 {"status":"ok"}
 ```
+请注意，目标设备ID，访问令牌，请求和响应实体将被硬编码为脚本并对应于演示设备。
+可在“插件->设备RPC消息插件”中查看插件详细信息。
 
-**Note** that target device id, access tokens, request and response bodies are hardcoded into scripts and correspond to the [demo devices](/docs/samples/demo-account/#tenant-devices).   
+![img](http://help.gzhaibaogd.com/images/plugin-rpcmessage.png)
 
-## Example
-
-As a tenant administrator, you are able to review plugin example inside **Plugins->Demo Device Messaging RPC Plugin**.
